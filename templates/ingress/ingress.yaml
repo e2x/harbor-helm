@@ -1,4 +1,3 @@
-{{- if eq .Values.expose.type "ingress" }}
 {{- $ingress := .Values.expose.ingress -}}
 {{- $tls := .Values.expose.tls -}}
 apiVersion: extensions/v1beta1
@@ -10,56 +9,38 @@ metadata:
   annotations:
 {{ toYaml $ingress.annotations | indent 4 }}
 spec:
-  {{- if $tls.enabled }}
   tls:
-    {{- if $tls.secretName }}
-  - secretName: {{ $tls.secretName }}
-    {{- else }}
-  - secretName: "{{ template "harbor.ingress" . }}"
-    {{- end }}
-    {{- if $ingress.hosts.core }}
+  - secretName: {{ $tls.certManagerGeneratedSecretForCore }}
     hosts:
     - {{ $ingress.hosts.core }}
-    {{- end }}
-  {{- if .Values.notary.enabled }}
-    {{- if $tls.notarySecretName }}
-  - secretName: {{ $tls.notarySecretName }}
-    {{- else if $tls.secretName }}
-  - secretName: {{ $tls.secretName }}
-    {{- else }}
-  - secretName: "{{ template "harbor.ingress" . }}"
-    {{- end }}
-    {{- if $ingress.hosts.notary }}
+  - secretName: {{ $tls.certManagerGeneratedSecretForNotary }}
     hosts:
     - {{ $ingress.hosts.notary }}
-    {{- end }}
-  {{- end }}
-  {{- end }}
 {{- if  eq .Values.expose.ingress.controller "gce" }}
   rules:
   - http:
       paths:
-      - path: /*
+      - path: /
         backend:
           serviceName: {{ template "harbor.portal" . }}
           servicePort: 80
-      - path: /api/*
+      - path: /api/
         backend:
           serviceName: {{ template "harbor.core" . }}
           servicePort: 80
-      - path: /service/*
+      - path: /service/
         backend:
           serviceName: {{ template "harbor.core" . }}
           servicePort: 80
-      - path: /v2/*
+      - path: /v2/
         backend:
           serviceName: {{ template "harbor.core" . }}
           servicePort: 80
-      - path: /chartrepo/*
+      - path: /chartrepo/
         backend:
           serviceName: {{ template "harbor.core" . }}
           servicePort: 80
-      - path: /c/*
+      - path: /c/
         backend:
           serviceName: {{ template "harbor.core" . }}
           servicePort: 80
@@ -119,5 +100,4 @@ spec:
     host: {{ $ingress.hosts.notary }}
     {{- end }}
   {{- end }}
-{{- end }}
 {{- end }}
