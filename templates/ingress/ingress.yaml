@@ -58,31 +58,30 @@ spec:
     host: {{ $ingress.hosts.notary }}
     {{- end }}
   {{- end }}
-{{- else }}
   rules:
   - http:
       paths:
-      - path: /
+      - path: {{ .portal_path }}
         backend:
           serviceName: {{ template "harbor.portal" . }}
           servicePort: 80
-      - path: /api/
+      - path: {{ .api_path }}
         backend:
           serviceName: {{ template "harbor.core" . }}
           servicePort: 80
-      - path: /service/
+      - path: {{ .service_path }}
         backend:
           serviceName: {{ template "harbor.core" . }}
           servicePort: 80
-      - path: /v2/
+      - path: {{ .v2_path }}
         backend:
           serviceName: {{ template "harbor.core" . }}
           servicePort: 80
-      - path: /chartrepo/
+      - path: {{ .chartrepo_path }}
         backend:
           serviceName: {{ template "harbor.core" . }}
           servicePort: 80
-      - path: /c/
+      - path: {{ .controller_path }}
         backend:
           serviceName: {{ template "harbor.core" . }}
           servicePort: 80
