@@ -61,27 +61,27 @@ spec:
   rules:
   - http:
       paths:
-      - path: {{ .portal_path }}
+      - path: /
         backend:
           serviceName: {{ template "harbor.portal" . }}
           servicePort: 80
-      - path: {{ .api_path }}
+      - path: /api/
         backend:
           serviceName: {{ template "harbor.core" . }}
           servicePort: 80
-      - path: {{ .service_path }}
+      - path: /service/
         backend:
           serviceName: {{ template "harbor.core" . }}
           servicePort: 80
-      - path: {{ .v2_path }}
+      - path: /v2/
         backend:
           serviceName: {{ template "harbor.core" . }}
           servicePort: 80
-      - path: {{ .chartrepo_path }}
+      - path: /chartrepo/
         backend:
           serviceName: {{ template "harbor.core" . }}
           servicePort: 80
-      - path: {{ .controller_path }}
+      - path: /c/
         backend:
           serviceName: {{ template "harbor.core" . }}
           servicePort: 80
