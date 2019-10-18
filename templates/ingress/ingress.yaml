@@ -1,4 +1,3 @@
-{{- if eq .Values.expose.type "ingress" }}
 {{- $ingress := .Values.expose.ingress -}}
 {{- $tls := .Values.expose.tls -}}
 {{- if eq .Values.expose.ingress.controller "gce" }}
@@ -103,4 +102,3 @@ spec:
     host: {{ $ingress.hosts.notary }}
     {{- end }}
   {{- end }}
-{{- end }}
